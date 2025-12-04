@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
@@ -16,10 +17,66 @@ void Game::start()
     {
         grid.display();
         cout << "Joueur : " << currentPlayer->getNom() << endl;
-        cout << "Entrez la Colonne[<>] (0-2) : ";
-        cin >> selectedRow;
-        cout << "Entrez la Ligne[^v] (0-2) : ";
-        cin >> selectedCol;
+        while (true)
+        {
+            cout << "Entrez la Colonne[X] (0-2) : ";
+            if (!(cin >> selectedCol))
+                {
+                    cout << "Entrée invalide ! Veuillez entrer un nombre." << endl;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    continue;
+                }
+                if (!grid.columnExist(selectedCol))
+                {
+                    cout << "Cette colonne n'existe pas !" << endl;
+                    cout << "Appuyez sur Entrée pour continuer..." << endl;
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin.get();
+
+                }
+                break;
+            }
+
+
+            if (!grid.columnExist(selectedCol))
+                continue;
+
+
+        while (true)
+        {
+        cout << "Entrez la Ligne[Y] (0-2) : ";
+        if (!(cin >> selectedRow))
+            {
+                cout << "Entrée invalide ! Veuillez entrer un nombre." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                continue;
+            }
+            if (!grid.getColumn(selectedCol).squareExist(selectedRow))
+            {
+                cout << "Cette ligne n'existe pas !" << endl;
+                cout << "Appuyez sur Entrée pour continuer..." << endl;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.get();
+                break;
+            }
+
+            if (grid.getColumn(selectedCol).getSquare(selectedRow).hasToken())
+            {
+                cout << "Cette case est deja prise ! Choisissez une autre." << endl;
+                cout << "Appuyez sur Entrée pour continuer..." << endl;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.get();
+                break;
+            }
+            break;
+        }
+
+
+        if (!grid.getColumn(selectedCol).squareExist(selectedRow) || grid.getColumn(selectedCol).getSquare(selectedRow).hasToken())
+            continue;
+
         Square square = play(selectedCol, selectedRow);
         vector<array<Square *, 3>> combinaison_list = getCombinaisons(square);
         if (checkWin(combinaison_list))
