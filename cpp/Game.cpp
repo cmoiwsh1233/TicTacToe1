@@ -17,37 +17,36 @@ void Game::start()
     {
         grid.display();
         cout << "Joueur : " << currentPlayer->getNom() << endl;
-
         while (true)
         {
             cout << "Entrez la Colonne[X] (0-2) : ";
             if (!(cin >> selectedCol))
-            {
-                cout << "Entrée invalide ! Veuillez entrer un nombre." << endl;
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                continue;
+                {
+                    cout << "Entrée invalide ! Veuillez entrer un nombre." << endl;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    continue;
+                }
+                if (!grid.columnExist(selectedCol))
+                {
+                    cout << "Cette colonne n'existe pas !" << endl;
+                    cout << "Appuyez sur Entrée pour continuer..." << endl;
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin.get();
+
+                }
+                break;
             }
+
+
             if (!grid.columnExist(selectedCol))
-            {
-                cout << "Cette colonne n'existe pas !" << endl;
-                cout << "Appuyez sur Entrée pour continuer..." << endl;
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cin.get();
-
-            }
-            break;
-        }
-
-
-        if (!grid.columnExist(selectedCol))
-            continue;
+                continue;
 
 
         while (true)
         {
-            cout << "Entrez la Ligne[Y] (0-2) : ";
-            if (!(cin >> selectedRow))
+        cout << "Entrez la Ligne[Y] (0-2) : ";
+        if (!(cin >> selectedRow))
             {
                 cout << "Entrée invalide ! Veuillez entrer un nombre." << endl;
                 cin.clear();

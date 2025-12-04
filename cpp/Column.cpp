@@ -13,12 +13,20 @@ Column::Column(int xCoord) : x(xCoord) {
 
 int Column::getX() const { return x; }
 
+int y = 0;
+
 void Column::display() {
+    
+    cout << y;
     cout << "|";
     for(int i = square_list.size() -1; i>= 0; --i) {
         square_list[i].display();
     }
     cout << "|" << endl;
+    y++;
+    if (y > 2) {
+        y = 0;
+    }
 }
 
 Square& Column::getSquare(int yCoord) {
