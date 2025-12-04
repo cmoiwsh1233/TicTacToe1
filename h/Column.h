@@ -7,7 +7,7 @@
 class Column {
     private:
         int x;
-        array<Square,7> square_list;
+        array<Square,3> square_list;
     public:
         Column();
         Column(int xCoord);

@@ -1,10 +1,9 @@
 #include "Grid.h"
 #include <iostream>
-
 using namespace std;
 
 Grid::Grid() {
-    for(int x = 0; x<7; x++) {
+    for(int x = 0; x<3; x++) {
         column_list[x] = Column(x);
     }
 }
