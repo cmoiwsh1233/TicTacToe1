@@ -13,6 +13,7 @@ class Game
         Joueur j2;
         Joueur* currentPlayer;
         Grid grid;
+        int moveCount = 0;
          
     public:
         Game();

@@ -7,12 +7,15 @@ using namespace std;
 Game::Game() : j1(), j2(), grid()
 {
     currentPlayer = &j1;
+    // Ajout d'un compteur de coups pour la partie nulle
+    moveCount = 0;
 }
 
 void Game::start()
 {
     int selectedCol;
     int selectedRow;
+    moveCount = 0; // Réinitialise le compteur au début de chaque partie
     while (true)
     {
         grid.display();
@@ -21,32 +24,29 @@ void Game::start()
         {
             cout << "Entrez la Colonne[X] (0-2) : ";
             if (!(cin >> selectedCol))
-                {
-                    cout << "Entrée invalide ! Veuillez entrer un nombre." << endl;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    continue;
-                }
-                if (!grid.columnExist(selectedCol))
-                {
-                    cout << "Cette colonne n'existe pas !" << endl;
-                    cout << "Appuyez sur Entrée pour continuer..." << endl;
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cin.get();
-
-                }
-                break;
-            }
-
-
-            if (!grid.columnExist(selectedCol))
+            {
+                cout << "Entrée invalide ! Veuillez entrer un nombre." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 continue;
+            }
+            if (!grid.columnExist(selectedCol))
+            {
+                cout << "Cette colonne n'existe pas !" << endl;
+                cout << "Appuyez sur Entrée pour continuer..." << endl;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.get();
+            }
+            break;
+        }
 
+        if (!grid.columnExist(selectedCol))
+            continue;
 
         while (true)
         {
-        cout << "Entrez la Ligne[Y] (0-2) : ";
-        if (!(cin >> selectedRow))
+            cout << "Entrez la Ligne[Y] (0-2) : ";
+            if (!(cin >> selectedRow))
             {
                 cout << "Entrée invalide ! Veuillez entrer un nombre." << endl;
                 cin.clear();
@@ -61,7 +61,6 @@ void Game::start()
                 cin.get();
                 break;
             }
-
             if (grid.getColumn(selectedCol).getSquare(selectedRow).hasToken())
             {
                 cout << "Cette case est deja prise ! Choisissez une autre." << endl;
@@ -73,30 +72,38 @@ void Game::start()
             break;
         }
 
-
         if (!grid.getColumn(selectedCol).squareExist(selectedRow) || grid.getColumn(selectedCol).getSquare(selectedRow).hasToken())
             continue;
 
         Square square = play(selectedCol, selectedRow);
+        moveCount++; // Incrémente le compteur de coups
         vector<array<Square *, 3>> combinaison_list = getCombinaisons(square);
         if (checkWin(combinaison_list))
         {
             grid.display();
+            cout << "Vainqueur :" << currentPlayer->getNom() << endl;
+            cout << "Partie terminee" << endl;
+            system("pause");
+            break;
+        }
+        if (moveCount == 9) {
+            grid.display();
+            cout << "Match nul !" << endl;
+            cout << "Partie terminee" << endl;
+            system("pause");
             break;
         }
         if (currentPlayer == &j1)
         {
             currentPlayer = &j2;
-        }
+                }
         else
         {
             currentPlayer = &j1;
         }
     }
-    cout << "Vainqueur :" << currentPlayer->getNom() << endl;
-    cout << "Partie terminee" << endl;
-    system("pause");
 }
+
 void Game::selectNames()
 {
     cout << "Veuillez saisir le nom du joueur 1 :";
