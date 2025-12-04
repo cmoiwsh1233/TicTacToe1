@@ -6,7 +6,7 @@ using namespace std;
 Column::Column() : x(0) {} 
 
 Column::Column(int xCoord) : x(xCoord) {
-    for(int y = 0; y<7; y++) {
+    for(int y = 0; y<3; y++) {
         square_list[y] = Square(xCoord,y);
     }
 }
