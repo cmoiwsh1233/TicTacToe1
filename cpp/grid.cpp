@@ -24,7 +24,7 @@ Column& Grid::getColumn(int xCoord) {
 
 void Grid::reset(){
     for(int col = 0; col < column_list.size() ; col++) {
-        for(int x = 0; x < 6; x++){
+        for(int x = 0; x < 2; x++){
             column_list[col].getSquare(x).getToken().reset();
         }
     }
