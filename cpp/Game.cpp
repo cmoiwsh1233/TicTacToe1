@@ -16,10 +16,10 @@ void Game::start()
     {
         grid.display();
         cout << "Joueur : " << currentPlayer->getNom() << endl;
-        cout << "Entrez la Colonne[X] (0-2) : ";
-        cin >> selectedCol;
-        cout << "Entrez la Ligne[Y] (0-2) : ";
+        cout << "Entrez la Colonne[<>] (0-2) : ";
         cin >> selectedRow;
+        cout << "Entrez la Ligne[^v] (0-2) : ";
+        cin >> selectedCol;
         Square square = play(selectedCol, selectedRow);
         vector<array<Square *, 3>> combinaison_list = getCombinaisons(square);
         if (checkWin(combinaison_list))
