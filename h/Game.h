@@ -18,9 +18,9 @@ class Game
         Game();
         void start();
         void selectNames();
-        Square play(int col);
-        vector<array<Square*, 4>> getCombinaisons(Square square);
-        bool checkWin(vector<array<Square*, 4>> combinaison_list);
+        Square play(int col, int row);
+        vector<array<Square*, 3>> getCombinaisons(Square square);
+        bool checkWin(vector<array<Square*, 3>> combinaison_list);
         void drawCombinaison();
 };
 

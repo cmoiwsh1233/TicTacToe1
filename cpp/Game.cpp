@@ -11,14 +11,17 @@ Game::Game() : j1(), j2(), grid()
 void Game::start()
 {
     int selectedCol;
+    int selectedRow;
     while (true)
     {
         grid.display();
         cout << "Joueur : " << currentPlayer->getNom() << endl;
-        cout << "Choisissez une colonne entre 0 et 6" << endl;
+        cout << "Entrez la Colonne[X] (0-2) : ";
         cin >> selectedCol;
-        Square square = play(selectedCol);
-        vector<array<Square *, 4>> combinaison_list = getCombinaisons(square);
+        cout << "Entrez la Ligne[Y] (0-2) : ";
+        cin >> selectedRow;
+        Square square = play(selectedCol, selectedRow);
+        vector<array<Square *, 3>> combinaison_list = getCombinaisons(square);
         if (checkWin(combinaison_list))
         {
             grid.display();
@@ -43,42 +46,41 @@ void Game::selectNames()
     string name1;
     cin >> name1;
     j1.setNom(name1);
-    cout << "Veuillez saisir le token du joueur 1 :";
-    string token1;
-    cin >> token1;
+
+    string token1 = "X";
     j1.setToken(token1);
+
     cout << "Veillez saisir le nom du joueur 2 :";
     string name2;
     cin >> name2;
     j2.setNom(name2);
-    cout << "Veillez saisir le token du joueur 2 :";
-    string token2;
-    cin >> token2;
+
+    string token2 = "O";
     j2.setToken(token2);
 }
 
-Square Game::play(int col)
+Square Game::play(int col, int row)
 {
     Column &currentCol = grid.getColumn(col);
-    for (int i = currentCol.getSquareNumber() - 1; i >= 0; i--)
+    if (!currentCol.getSquare(row).hasToken())
     {
-        if (!currentCol.getSquare(i).hasToken())
-        {
-            currentCol.getSquare(i).setToken(currentPlayer->getToken());
-            return currentCol.getSquare(i);
-        }
+        currentCol.getSquare(row).setToken(currentPlayer->getToken());
+        return currentCol.getSquare(row);
     }
+    return currentCol.getSquare(row);
 }
 
-vector<array<Square *, 4>> Game::getCombinaisons(Square square)
+vector<array<Square *, 3>> Game::getCombinaisons(Square square)
 {
-    vector<array<Square *, 4>> combinaison_list;
-    for (int index = -3; index <= 0; index++)
+    vector<array<Square *, 3>> combinaison_list;
+    
+    // Horizontal
+    for (int index = -2; index <= 0; index++)
     {
         int i = 0;
-        array<Square *, 4> combinaison;
+        array<Square *, 3> combinaison;
         bool exist = true;
-        for (int x = square.getX() + index; x <= square.getX() + index + 3; x++)
+        for (int x = square.getX() + index; x <= square.getX() + index + 2; x++)
         {
             if (grid.columnExist(x) && grid.getColumn(x).squareExist(square.getY()))
             {
@@ -95,12 +97,14 @@ vector<array<Square *, 4>> Game::getCombinaisons(Square square)
             combinaison_list.push_back(combinaison);
         }
     }
-    for (int index = -3; index <= 0; index++)
+    
+    // Vertical
+    for (int index = -2; index <= 0; index++)
     {
         int i = 0;
-        array<Square *, 4> combinaison;
+        array<Square *, 3> combinaison;
         bool exist = true;
-        for (int y = square.getY() + index; y <= square.getY() + index + 3; y++)
+        for (int y = square.getY() + index; y <= square.getY() + index + 2; y++)
         {
             if (grid.columnExist(square.getX()) && grid.getColumn(square.getX()).squareExist(y))
             {
@@ -117,16 +121,18 @@ vector<array<Square *, 4>> Game::getCombinaisons(Square square)
             combinaison_list.push_back(combinaison);
         }
     }
-    for (int index = -3; index <= 0; index++)
+    
+    // Diagonal (\)
+    for (int index = -2; index <= 0; index++)
     {
         int i = 0;
-        array<Square *, 4> combinaison;
+        array<Square *, 3> combinaison;
         bool exist = true;
-        for (int xy = index; xy <= index + 3; xy++)
+        for (int xy = index; xy <= index + 2; xy++)
         {
-            if (grid.columnExist(square.getX() - xy) && grid.getColumn(square.getX() - xy).squareExist(square.getY() - xy))
+            if (grid.columnExist(square.getX() + xy) && grid.getColumn(square.getX() + xy).squareExist(square.getY() + xy))
             {
-                combinaison[i++] = &grid.getColumn(square.getX() - xy).getSquare(square.getY() - xy);
+                combinaison[i++] = &grid.getColumn(square.getX() + xy).getSquare(square.getY() + xy);
             }
             else
             {
@@ -139,16 +145,18 @@ vector<array<Square *, 4>> Game::getCombinaisons(Square square)
             combinaison_list.push_back(combinaison);
         }
     }
-    for (int index = -3; index <= 0; index++)
+    
+    // Diagonal (/)
+    for (int index = -2; index <= 0; index++)
     {
         int i = 0;
-        array<Square *, 4> combinaison;
+        array<Square *, 3> combinaison;
         bool exist = true;
-        for (int xy = index; xy <= index + 3; xy++)
+        for (int xy = index; xy <= index + 2; xy++)
         {
-            if (grid.columnExist(square.getX() - xy) && grid.getColumn(square.getX() - xy).squareExist(square.getY() + xy))
+            if (grid.columnExist(square.getX() + xy) && grid.getColumn(square.getX() + xy).squareExist(square.getY() - xy))
             {
-                combinaison[i++] = &grid.getColumn(square.getX() - xy).getSquare(square.getY() + xy);
+                combinaison[i++] = &grid.getColumn(square.getX() + xy).getSquare(square.getY() - xy);
             }
             else
             {
@@ -161,6 +169,7 @@ vector<array<Square *, 4>> Game::getCombinaisons(Square square)
             combinaison_list.push_back(combinaison);
         }
     }
+    
     return combinaison_list;
 }
 
@@ -179,23 +188,19 @@ void Game::drawCombinaison()
     }
 }
 
-bool Game::checkWin(vector<array<Square *, 4>> combinaison_list)
+bool Game::checkWin(vector<array<Square *, 3>> combinaison_list)
 {
     for (int index = 0; index < combinaison_list.size(); index++)
     {
-
-        array<Square *, 4> combinaison = combinaison_list[index];
+        array<Square *, 3> combinaison = combinaison_list[index];
         if (combinaison[0]->getToken().has_value() &&
             combinaison[1]->getToken().has_value() &&
-            combinaison[2]->getToken().has_value() &&
-            combinaison[3]->getToken().has_value())
+            combinaison[2]->getToken().has_value())
         {
             string token = combinaison[0]->getToken().value_ref();
             if (token == combinaison[1]->getToken().value_ref() &&
-                token == combinaison[2]->getToken().value_ref() &&
-                token == combinaison[3]->getToken().value_ref())
+                token == combinaison[2]->getToken().value_ref())
             {
-                
                 return true;
             }
         }
