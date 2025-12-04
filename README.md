@@ -15,7 +15,7 @@ Marwane Kabil(cmoiwsh1233) : (je me suis surtout occupé du Game)
 -Plus le choix de choisir un token c'est imposé directement 
 -et la grille 3x3
 
-Abdeslam Sitouah (abd3l06) : (column et on a tous vu ensemble du main)
+Abdeslam Sitouah (abd3l06) (erreur sur la machine, j'ai du continuer sur la machine de Arthur): (column et on a tous vu ensemble du main)
 -Je me suis occupé de toute la partie Colonne 
 -Compteur match nul 
 -Gestion d'erreur 
