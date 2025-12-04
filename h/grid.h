@@ -6,7 +6,7 @@
 
 class Grid {
     private:
-        array<Column,7> column_list;
+        array<Column,3> column_list;
     public:
         Grid();
         void display();
